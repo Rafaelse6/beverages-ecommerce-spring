@@ -24,13 +24,17 @@ public class Order {
     @OneToMany(mappedBy = "id.order")
     private Set<OrderItem> items = new HashSet<>();
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
     public Order() {}
 
-    public Order(Long id, Instant moment, OrderStatus status) {
+    public Order(Long id, Instant moment, OrderStatus status, Payment payment) {
         super();
         this.id = id;
         this.moment = moment;
         this.status = status;
+        this.payment = payment;
     }
 
     public Long getId() {
@@ -63,6 +67,14 @@ public class Order {
 
     public List<Beverage> getBeverages(){
         return items.stream().map(OrderItem::getBeverage).toList();
+    }
+
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     @Override
