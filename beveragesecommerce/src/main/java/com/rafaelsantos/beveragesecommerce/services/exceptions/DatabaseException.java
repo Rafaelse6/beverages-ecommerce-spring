@@ -1,9 +1,9 @@
 package com.rafaelsantos.beveragesecommerce.services.exceptions;
 
 @SuppressWarnings("serial")
-public class ResourceNotFoundException extends RuntimeException {
+public class DatabaseException extends RuntimeException {
 
-    public ResourceNotFoundException(String msg){
+    public DatabaseException(String msg){
         super(msg);
     }
 }
