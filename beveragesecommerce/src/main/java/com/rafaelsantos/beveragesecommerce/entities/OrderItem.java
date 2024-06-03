@@ -16,6 +16,9 @@ public class OrderItem {
     private Integer quantity;
     private Double price;
 
+    public OrderItem() {
+    }
+
     public OrderItem(Order order, Beverage beverage, Integer quantity, Double price) {
         id.setOrder(order);
         id.setBeverage(beverage);
