@@ -53,7 +53,7 @@ public class BeverageDTO implements Serializable {
         imgUrl = entity.getImgUrl();
 
         for (Category cat : entity.getCategories()){
-            categories.add(new CategoryDTO(cat));
+           git categories.add(new CategoryDTO(cat));
         }
     }
 
@@ -63,6 +63,10 @@ public class BeverageDTO implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public Double getPrice() {
@@ -76,4 +80,5 @@ public class BeverageDTO implements Serializable {
     public List<CategoryDTO> getCategories() {
         return categories;
     }
+
 }
