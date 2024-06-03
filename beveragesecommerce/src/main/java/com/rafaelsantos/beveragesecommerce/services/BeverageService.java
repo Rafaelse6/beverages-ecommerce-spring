@@ -6,6 +6,7 @@ import com.rafaelsantos.beveragesecommerce.entities.Category;
 import com.rafaelsantos.beveragesecommerce.entities.DTO.BeverageDTO;
 import com.rafaelsantos.beveragesecommerce.entities.DTO.CategoryDTO;
 import com.rafaelsantos.beveragesecommerce.repositories.BeverageRepository;
+import com.rafaelsantos.beveragesecommerce.repositories.CategoryRepository;
 import com.rafaelsantos.beveragesecommerce.services.exceptions.DatabaseException;
 import com.rafaelsantos.beveragesecommerce.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,6 +22,9 @@ public class BeverageService {
 
     @Autowired
     private BeverageRepository beverageRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public BeverageDTO findById(Long id) {
@@ -46,13 +50,13 @@ public class BeverageService {
     }
 
     @Transactional
-    public BeverageDTO update(Long id,BeverageDTO dto){
-        try{
+    public BeverageDTO update(Long id, BeverageDTO dto){
+        try {
             Beverage entity = beverageRepository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
             entity = beverageRepository.save(entity);
             return new BeverageDTO(entity);
-        } catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
     }
@@ -64,9 +68,7 @@ public class BeverageService {
 
         try {
             beverageRepository.deleteById(id);
-        }
-
-        catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e){
             throw new DatabaseException("Fala de integridade referencial");
         }
     }
@@ -79,8 +81,8 @@ public class BeverageService {
 
         entity.getCategories().clear();
         for (CategoryDTO catDto : dto.getCategories()) {
-            Category cat = new Category();
-            cat.setId(catDto.getId());
+            Category cat = categoryRepository.findById(catDto.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
             entity.getCategories().add(cat);
         }
     }

@@ -53,7 +53,7 @@ public class BeverageDTO implements Serializable {
         imgUrl = entity.getImgUrl();
 
         for (Category cat : entity.getCategories()){
-           git categories.add(new CategoryDTO(cat));
+            categories.add(new CategoryDTO(cat));
         }
     }
 
