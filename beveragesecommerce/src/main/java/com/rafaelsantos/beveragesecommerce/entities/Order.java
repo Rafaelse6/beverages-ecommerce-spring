@@ -27,13 +27,17 @@ public class Order {
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
     private Payment payment;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private User client;
+
     public Order() {}
 
-    public Order(Long id, Instant moment, OrderStatus status, Payment payment) {
-        super();
+    public Order(Long id, Instant moment, OrderStatus status, User client, Payment payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
+        this.client = client;
         this.payment = payment;
     }
 
@@ -75,6 +79,14 @@ public class Order {
 
     public void setPayment(Payment payment) {
         this.payment = payment;
+    }
+
+    public User getClient() {
+        return client;
+    }
+
+    public void setClient(User client) {
+        this.client = client;
     }
 
     @Override
