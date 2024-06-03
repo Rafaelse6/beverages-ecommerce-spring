@@ -2,18 +2,11 @@ package com.rafaelsantos.beveragesecommerce.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "tb_beverages")
@@ -35,6 +28,9 @@ public class Beverage implements Serializable {
             joinColumns = @JoinColumn(name = "beverage_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
+
+    @OneToMany(mappedBy = "id.beverage")
+    private Set<OrderItem> items = new HashSet<>();
 
     public Beverage() {
     }
@@ -89,6 +85,14 @@ public class Beverage implements Serializable {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    public Set<OrderItem> getItems() {
+        return items;
+    }
+
+    public List<Order> getOrders(){
+        return items.stream().map(OrderItem::getOrder).toList();
     }
 
     @Override
