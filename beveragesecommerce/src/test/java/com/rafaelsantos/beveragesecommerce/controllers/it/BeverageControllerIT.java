@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rafaelsantos.beveragesecommerce.entities.Beverage;
+import com.rafaelsantos.beveragesecommerce.entities.Category;
 import com.rafaelsantos.beveragesecommerce.entities.DTO.BeverageDTO;
 import com.rafaelsantos.beveragesecommerce.tests.TokenUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,9 +48,15 @@ public class BeverageControllerIT {
         adminUsername = "alex@gmail.com";
         adminPassword = "123456";
 
+        Category category = new Category(2L, "Non-Alcoholic");
+
+        beverage = new Beverage(null, "Orange Juice", "'Fresh squeezed orange juice", 0.50, "https://example.com/orangejuice.jpg" );
+        beverage.getCategories().add(category);
+
+        beverageDTO = new BeverageDTO(beverage);
         beverageName = "Pepsi";
 
-        adminToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
+        clientToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
         adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
         invalidToken = adminToken + "xpto";
     }
@@ -182,4 +189,14 @@ public class BeverageControllerIT {
         result.andExpect(status().isUnprocessableEntity());
     }
 
+    @Test
+    public void insertShouldThrowForbiddenWhenClientLogged() throws Exception {
+
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
+
+        ResultActions result = mockMvc.perform(post("/beverages").header("Authorization", "Bearer " + clientToken)
+                .content(jsonBody).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isForbidden());
+    }
 }
