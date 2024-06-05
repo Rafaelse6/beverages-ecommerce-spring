@@ -5,6 +5,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rafaelsantos.beveragesecommerce.entities.Beverage;
+import com.rafaelsantos.beveragesecommerce.entities.DTO.BeverageDTO;
+import com.rafaelsantos.beveragesecommerce.tests.TokenUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +27,31 @@ public class BeverageControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
-    private String beverageName;
+    @Autowired
+    private TokenUtil tokenUtil;
 
-    private String adminToken;
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private String beverageName;
+    private BeverageDTO beverageDTO;
+    private Beverage beverage;
+
+    private String clientUsername, clientPassword, adminUsername, adminPassword;
+    private String clientToken, adminToken, invalidToken;
 
     @BeforeEach
     void setUp() throws Exception{
+        clientUsername = "maria@gmail.com";
+        clientPassword = "123456";
+        adminUsername = "alex@gmail.com";
+        adminPassword = "123456";
+
         beverageName = "Pepsi";
+
+        adminToken = tokenUtil.obtainAccessToken(mockMvc, clientUsername, clientPassword);
+        adminToken = tokenUtil.obtainAccessToken(mockMvc, adminUsername, adminPassword);
+        invalidToken = adminToken + "xpto";
     }
 
     @Test
@@ -61,7 +83,7 @@ public class BeverageControllerIT {
 
     @Test
     public void insertShouldReturnBeverageDTOCreatedWhenAdminLogged() throws Exception{
-        String jsonBody = "";
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
 
         ResultActions result = mockMvc
                 .perform(post("/beverages")
