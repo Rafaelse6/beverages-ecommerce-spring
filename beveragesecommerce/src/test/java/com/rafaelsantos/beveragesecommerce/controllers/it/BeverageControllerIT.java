@@ -1,7 +1,6 @@
 package com.rafaelsantos.beveragesecommerce.controllers.it;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -18,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -34,6 +34,7 @@ public class BeverageControllerIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private Long existingBeverageId, nonExistingBeverageId, dependentBeverageId;
     private String beverageName;
     private BeverageDTO beverageDTO;
     private Beverage beverage;
@@ -48,9 +49,13 @@ public class BeverageControllerIT {
         adminUsername = "alex@gmail.com";
         adminPassword = "123456";
 
+        existingBeverageId = 2L;
+        nonExistingBeverageId = 100L;
+        dependentBeverageId = 1L;
+
         Category category = new Category(2L, "Non-Alcoholic");
 
-        beverage = new Beverage(null, "Orange Juice", "'Fresh squeezed orange juice", 0.50, "https://example.com/orangejuice.jpg" );
+        beverage = new Beverage(null, "Orange Juice", "'Fresh squeezed orange juice", 0.50, "https://example.com/orangejuice.jpg");
         beverage.getCategories().add(category);
 
         beverageDTO = new BeverageDTO(beverage);
@@ -198,5 +203,47 @@ public class BeverageControllerIT {
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteShouldReturnNoContentWhenIdExistsAndAdminLogged() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/beverages/{id}", existingBeverageId)
+                .header("Authorization", "Bearer " + adminToken).accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNoContent());
+    }
+
+    @Test
+    public void deleteShouldReturnNotFoundWhenIdExistsAndAdminLogged() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/beverages/{id}", nonExistingBeverageId)
+                .header("Authorization", "Bearer " + adminToken).accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void deleteShouldReturnBadRequestWhenIdExistsAndAdminLogged() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/beverages/{id}", dependentBeverageId)
+                .header("Authorization", "Bearer " + adminToken)
+                .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void deleteShouldReturnForbiddenWhenClientLogged() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/beverages/{id}", existingBeverageId)
+                .header("Authorization", "Bearer " + clientToken).accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isForbidden());
+    }
+
+    @Test
+    public void deleteShouldReturnUnauthorizedWhenIdExistsAndInvalidToken() throws Exception {
+        ResultActions result = mockMvc.perform(delete("/beverages/{id}", existingBeverageId)
+                .header("Authorization", "Bearer " + invalidToken).accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnauthorized());
     }
 }

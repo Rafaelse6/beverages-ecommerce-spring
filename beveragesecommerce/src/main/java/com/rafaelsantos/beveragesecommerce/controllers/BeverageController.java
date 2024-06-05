@@ -54,7 +54,7 @@ public class BeverageController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delele(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         beverageService.delete(id);
         return ResponseEntity.noContent().build();
     }

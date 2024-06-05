@@ -63,15 +63,15 @@ public class BeverageService {
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
-    public void delete(Long id){
-        if(!beverageRepository.existsById(id)){
+    public void delete(Long id) {
+        if (!beverageRepository.existsById(id)) {
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
-
         try {
             beverageRepository.deleteById(id);
-        } catch (DataIntegrityViolationException e){
-            throw new DatabaseException("Fala de integridade referencial");
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Falha de integridade referencial");
         }
     }
 
