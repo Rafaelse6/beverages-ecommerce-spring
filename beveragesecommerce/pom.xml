@@ -80,6 +80,8 @@
 							com/rafaelsantos/dscommerce/BeveragesecommerceApplication.class</exclude>
 						<exclude>com/rafaelsantos/beveragesecommerce/config/**</exclude>
 						<exclude>com/rafaelsantos/beveragesecommerce/entities/**</exclude>
+						<exclude>com/rafaelsantos/beveragesecommerce/util/**</exclude>
+						<exclude>com/rafaelsantos/beveragesecommerce/controllers/**</exclude>
 						<exclude>com/rafaelsantos/beveragesecommerce/DTO/**</exclude>
 						<exclude>
 							com/rafaelsantos/beveragesecommerce/controllers/handlers/**</exclude>
