@@ -1,5 +1,6 @@
 package com.rafaelsantos.beveragesecommerce.services;
 
+import com.rafaelsantos.beveragesecommerce.entities.DTO.UserDTO;
 import com.rafaelsantos.beveragesecommerce.entities.User;
 import com.rafaelsantos.beveragesecommerce.factories.UserDetailsFactory;
 import com.rafaelsantos.beveragesecommerce.factories.UserFactory;
@@ -80,5 +81,27 @@ public class UserServiceTests {
         Mockito.doThrow(ClassCastException.class).when(userUtil).getLoggedUsername();
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> service.authenticated());
+    }
+
+    @Test
+    public void getMeShouldReturnUserDTOWhenUserIsAuthenticated() {
+        UserService spyUserService = Mockito.spy(service);
+        Mockito.doReturn(user).when(spyUserService).authenticated();
+
+        UserDTO result = spyUserService.getMe();
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(result.getEmail(), existingUsername);
+    }
+
+    @Test
+    public void getMeShouldReturnThrowResourceNotFoundExceptionWhenUserNotAuthenticated() {
+        UserService spyUserService = Mockito.spy(service);
+        Mockito.doThrow(UsernameNotFoundException.class).when(spyUserService).authenticated();
+
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> {
+            @SuppressWarnings("unused")
+            UserDTO result = spyUserService.getMe();
+        });
     }
 }
