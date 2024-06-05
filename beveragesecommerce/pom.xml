@@ -77,7 +77,7 @@
 				<configuration>
 					<excludes>
 						<exclude>
-							com/rafaelsantos/dscommerce/BeveragesecommerceApplication.class</exclude>
+							com/rafaelsantos/beveragesecommerce/BeveragesecommerceApplication.class</exclude>
 						<exclude>com/rafaelsantos/beveragesecommerce/config/**</exclude>
 						<exclude>com/rafaelsantos/beveragesecommerce/entities/**</exclude>
 						<exclude>com/rafaelsantos/beveragesecommerce/util/**</exclude>
