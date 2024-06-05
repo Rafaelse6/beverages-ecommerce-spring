@@ -41,7 +41,7 @@ public class BeverageControllerIT {
     private String clientToken, adminToken, invalidToken;
 
     @BeforeEach
-    void setUp() throws Exception{
+    void setUp() throws Exception {
         clientUsername = "maria@gmail.com";
         clientPassword = "123456";
         adminUsername = "alex@gmail.com";
@@ -55,7 +55,7 @@ public class BeverageControllerIT {
     }
 
     @Test
-    public void findAllShouldReturnPageWhenNameParamIsNotEmpty() throws Exception{
+    public void findAllShouldReturnPageWhenNameParamIsNotEmpty() throws Exception {
 
         ResultActions result = mockMvc
                 .perform(get("/beverages?name={beverageName}", beverageName)
@@ -69,7 +69,7 @@ public class BeverageControllerIT {
     }
 
     @Test
-    public void findAllShouldReturnPageWhenParamIsEmpty() throws Exception{
+    public void findAllShouldReturnPageWhenParamIsEmpty() throws Exception {
         ResultActions result = mockMvc
                 .perform(get("/beverages", beverageName)
                         .accept(MediaType.APPLICATION_JSON));
@@ -82,7 +82,7 @@ public class BeverageControllerIT {
     }
 
     @Test
-    public void insertShouldReturnBeverageDTOCreatedWhenAdminLogged() throws Exception{
+    public void insertShouldReturnBeverageDTOCreatedWhenAdminLogged() throws Exception {
         String jsonBody = objectMapper.writeValueAsString(beverageDTO);
 
         ResultActions result = mockMvc
@@ -91,4 +91,95 @@ public class BeverageControllerIT {
                         .content(jsonBody)
                         .accept(MediaType.APPLICATION_JSON));
     }
+
+    @Test
+    public void insertShouldThrowUnprocessableEntityWHenAdminLoggedAndInvalidName() throws Exception {
+        Beverage beverage = new Beverage();
+        beverage.setName("ab");
+        beverageDTO = new BeverageDTO(beverage);
+
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
+
+        ResultActions result = mockMvc
+                .perform(post("/beverages")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void insertShouldThrowUnprocessableEntityWhenAdminLoggedAndInvalidDescription() throws Exception {
+        Beverage beverage = new Beverage();
+        beverage.setName("ab");
+        beverageDTO = new BeverageDTO(beverage);
+
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
+
+        ResultActions result = mockMvc
+                .perform(post("/beverages")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void insertShouldThrowUnprocessableEntityWhenAdminLoggedAndNegativePrice() throws Exception {
+        Beverage beverage = new Beverage();
+        beverage.setPrice(-50.0);
+        beverageDTO = new BeverageDTO(beverage);
+
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
+
+        ResultActions result = mockMvc
+                .perform(post("/beverages")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void insertShouldThrowUnprocessableEntityWhenAdminLoggedAndPriceIsZero() throws Exception {
+        Beverage beverage = new Beverage();
+        beverage.setPrice(0.00);
+        beverageDTO = new BeverageDTO(beverage);
+
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
+
+        ResultActions result = mockMvc
+                .perform(post("/beverages")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    public void insertShouldThrowUnprocessableEntityWhenAdminLoggedAndBeverageHasNoCategory() throws Exception {
+        Beverage beverage = new Beverage();
+        beverage.getCategories().clear();
+        beverageDTO = new BeverageDTO(beverage);
+
+        String jsonBody = objectMapper.writeValueAsString(beverageDTO);
+
+        ResultActions result = mockMvc
+                .perform(post("/beverages")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON));
+
+        result.andExpect(status().isUnprocessableEntity());
+    }
+
 }
