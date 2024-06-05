@@ -5,6 +5,7 @@ import com.rafaelsantos.beveragesecommerce.entities.Role;
 import com.rafaelsantos.beveragesecommerce.entities.User;
 import com.rafaelsantos.beveragesecommerce.projections.UserDetailsProjection;
 import com.rafaelsantos.beveragesecommerce.repositories.UserRepository;
+import com.rafaelsantos.beveragesecommerce.util.CustomUserUtil;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,8 +22,11 @@ public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private CustomUserUtil customUserUtil;
+
+    public UserService(UserRepository userRepository, CustomUserUtil customUserUtil) {
         this.userRepository = userRepository;
+        this.customUserUtil = customUserUtil;
     }
 
     @Override
@@ -44,9 +48,7 @@ public class UserService implements UserDetailsService {
 
     protected User authenticated() {
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Jwt jwtPrincipal = (Jwt) authentication.getPrincipal();
-            String username = jwtPrincipal.getClaim("username");
+            String username = customUserUtil.getLoggedUsername();
             return userRepository.findByEmail(username).get();
         } catch (Exception e) {
             throw new UsernameNotFoundException("Invalid user");
