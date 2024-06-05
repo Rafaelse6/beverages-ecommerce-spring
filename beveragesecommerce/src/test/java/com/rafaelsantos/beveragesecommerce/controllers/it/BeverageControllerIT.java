@@ -1,6 +1,7 @@
 package com.rafaelsantos.beveragesecommerce.controllers.it;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,6 +24,8 @@ public class BeverageControllerIT {
     private MockMvc mockMvc;
 
     private String beverageName;
+
+    private String adminToken;
 
     @BeforeEach
     void setUp() throws Exception{
@@ -54,5 +57,16 @@ public class BeverageControllerIT {
         result.andExpect(jsonPath("$.content[0].name").value("Coca-Cola"));
         result.andExpect(jsonPath("$.content[0].price").value(1.99));
         result.andExpect(jsonPath("$.content[0].imgUrl").value("https://example.com/cocacola.jpg"));
+    }
+
+    @Test
+    public void insertShouldReturnBeverageDTOCreatedWhenAdminLogged() throws Exception{
+        String jsonBody = "";
+
+        ResultActions result = mockMvc
+                .perform(post("/beverages")
+                        .header("Authorization", "Bearer " + adminToken)
+                        .content(jsonBody)
+                        .accept(MediaType.APPLICATION_JSON));
     }
 }
