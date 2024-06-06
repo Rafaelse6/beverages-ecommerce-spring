@@ -1,6 +1,6 @@
 <h1> Beverages Ecommerce API </h1>
 
-### Beverage Ecommerce API using Java and Spring Boot.
+### Beverages Ecommerce API using Java and Spring Boot.
 ## Technologies used:
 
 <table>
@@ -21,6 +21,11 @@
     <td>JWT</td>
   </tr>
 </table>
+
+## Available Endpoints
+
+![image](https://github.com/Rafaelse6/beverages-ecommerce-spring/assets/64181619/8b37d60f-33d1-45a3-a77d-c8973274b29b)
+![image](https://github.com/Rafaelse6/beverages-ecommerce-spring/assets/64181619/be59e7ca-a428-4249-b1f9-8436cd05fb0b)
 
 ## Project structure
 ![image](https://github.com/Rafaelse6/beverages-ecommerce-spring/assets/64181619/806c65e2-1f21-4c6d-a8fd-0aa5c7fae855)
