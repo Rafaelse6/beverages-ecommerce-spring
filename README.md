@@ -19,6 +19,7 @@
     <td>Mockito</td>
     <td>JUnit 5</td>
     <td>JWT</td>
+    <td>Swagger</td>
   </tr>
 </table>
 
