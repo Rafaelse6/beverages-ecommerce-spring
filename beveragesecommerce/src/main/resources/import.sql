@@ -1,15 +1,15 @@
 INSERT INTO tb_category(name) VALUES ('Alcoholic')
 INSERT INTO tb_category(name) VALUES ('Non-Alcoholic')
 
-INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Coca-Cola', 1.99, 'Refreshing soft drink', 'https://example.com/cocacola.jpg');
-INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Pepsi', 1.89, 'Popular cola beverage', 'https://example.com/pepsi.jpg');
-INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Orange Juice', 2.99, 'Fresh squeezed orange juice', 'https://example.com/orangejuice.jpg');
-INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Red Wine', 15.99, 'Dry red wine', 'https://example.com/redwine.jpg');
-INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Lager Beer', 5.49, 'Crisp and refreshing lager', 'https://example.com/lagerbeer.jpg');
+INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Coca-Cola', 1.99, 'Refreshing soft drink', 'https://raw.githubusercontent.com/Rafaelse6/beverages/main/coca-cola.png');
+INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Iced Tea', 1.89, 'Refreshing iced tea', 'https://raw.githubusercontent.com/Rafaelse6/beverages/main/iced-tea.png');
+INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Smirnoff', 2.99, 'Really strong vodka', 'https://raw.githubusercontent.com/Rafaelse6/beverages/main/sminorff.png');
+INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Heineken', 15.99, 'Heineken beer', 'https://raw.githubusercontent.com/Rafaelse6/beverages/main/heineken.png');
+INSERT INTO tb_beverages (name, price, description, img_url) VALUES ('Budweiser', 5.49, 'Crisp and refreshing lager', 'https://raw.githubusercontent.com/Rafaelse6/beverages/main/budwaiser.png');
 
 INSERT INTO tb_beverage_category(beverage_id,category_id) VALUES (1,2);
 INSERT INTO tb_beverage_category(beverage_id,category_id) VALUES (2,2);
-INSERT INTO tb_beverage_category(beverage_id,category_id) VALUES (3,2);
+INSERT INTO tb_beverage_category(beverage_id,category_id) VALUES (3,1);
 INSERT INTO tb_beverage_category(beverage_id,category_id) VALUES (4,1);
 INSERT INTO tb_beverage_category(beverage_id,category_id) VALUES (5,1);
 
